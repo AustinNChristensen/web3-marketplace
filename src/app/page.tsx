@@ -1,5 +1,5 @@
 'use client';
-import { Address } from "@/components/Address";
+import { WalletBar } from "@/components/WalletBar";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CourseList } from "@/components/CourseList";
 import { Currency } from "@/components/Currency";
@@ -8,9 +8,15 @@ import { OrderInfo } from "@/components/OrderInfo";
 import { getAllCourses } from "@/content/courses/fetcher";
 import { ICourse } from "@/types";
 import { useEffect, useState } from "react";
+import { useNetwork } from "@/hooks/useNetwork";
+import { useWeb3 } from "@/providers/web3";
+import { useAccount } from "@/hooks/useAccount";
 
 export default function Home() {
   const [coursesData, setCoursesData] = useState<ICourse[]>([]);
+  const { web3 } = useWeb3();
+  const { account } = useAccount(web3);
+  const { network } = useNetwork(web3);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +32,10 @@ export default function Home() {
     <div className="fit">
       <Hero />
       <Breadcrumbs />
-      <Address />
+      <WalletBar
+        address={account.data}
+        network={network.data}
+      />
       <Currency />
       <OrderInfo />
       <CourseList
