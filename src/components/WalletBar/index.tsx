@@ -1,16 +1,18 @@
+import { IUseNetworkReturn } from "@/hooks/useNetwork";
+import { useWeb3 } from "@/providers/web3";
 
 interface IWalletBarProps {
-  network?: string;
-  address?: string
+  network?: IUseNetworkReturn["network"];
+  address?: string;
 }
 
 export const WalletBar = ({ address, network }: IWalletBarProps) => {
+  const { isMetamaskInstalled } = useWeb3();
+
   return (
-    <section className="text-white bg-indigo-600">
+    <section className="text-white bg-indigo-600 rounded-lg">
       <div className="p-8">
-        <h1 className="text-2xl">
-          Hello, {address || 'Unknown Address'}
-        </h1>
+        <h1 className="text-2xl">Hello, {address || "Unknown Address"}</h1>
         <h2 className="subtitle mb-5 text-xl">
           I hope you are having a great day!
         </h2>
@@ -26,10 +28,28 @@ export const WalletBar = ({ address, network }: IWalletBarProps) => {
             </div>
           </div>
           <div>
-            <div>
-              <span>Currently on </span>
-              <strong className="text-2xl">{network || 'Unknown Network'}</strong>
-            </div>
+            {network &&
+              network.hasFinishedFirstFetch &&
+              !network.isSupported && (
+                <div className="bg-red-400 p-4 rounded-lg">
+                  <div>Connected to wrong network</div>
+                  <div>
+                    Connect to: {` `}
+                    <strong className="text-2xl">{network.target}</strong>
+                  </div>
+                </div>
+              )}
+            {!isMetamaskInstalled && (
+              <div className="bg-yellow-500 p-4 rounded-lg">
+                Cannot connect to network. Please install Metamask.
+              </div>
+            )}
+            {network && network.data && (
+              <div>
+                <span>Currently on </span>
+                <strong className="text-2xl">{network.data}</strong>
+              </div>
+            )}
           </div>
         </div>
       </div>

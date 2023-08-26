@@ -11,8 +11,21 @@ const NETWORKS = {
   1337: "Ganache",
 }
 
-export const useNetwork = (web3: any) => {
-  const { mutate, ...rest } = useSWR(
+const targetNetwork = NETWORKS[process.env.NEXT_PUBLIC_TARGET_CHAIN_ID]
+
+export interface IUseNetworkReturn {
+  network: {
+    data: string | undefined;
+    mutate: any;
+    target: string | undefined;
+    isSupported: boolean;
+    error: any;
+    hasFinishedFirstFetch: boolean;
+  };
+}
+
+export const useNetwork = (web3: any): IUseNetworkReturn => {
+  const { data, error, mutate, ...rest } = useSWR(
     () => (web3 ? "web3/network" : null),
     async () => {
       const chainId: keyof typeof NETWORKS = await web3.eth.getChainId()
@@ -28,7 +41,12 @@ export const useNetwork = (web3: any) => {
 
   return {
     network: {
+      data,
       mutate,
+      error,
+      target: targetNetwork,
+      hasFinishedFirstFetch: data || error,
+      isSupported: targetNetwork === data,
       ...rest,
     },
   };

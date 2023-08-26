@@ -1,0 +1,39 @@
+import { classNames } from "@/utils";
+import { PropsWithChildren } from "react";
+
+export const BaseModal = ({
+  isOpen = false,
+  children,
+}: PropsWithChildren<{ isOpen?: boolean }>) => {
+  return (
+    <section>
+      {/* Remove hidden to display it */}
+      <div
+        className={classNames(
+          "fixed z-10 inset-0 overflow-y-auto",
+          !isOpen && "hidden"
+        )}
+        aria-labelledby="modal-title"
+        role="dialog"
+        aria-modal="true"
+      >
+        <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+          {/* Adds Gray BG */}
+          {isOpen && (
+            <div
+              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+              aria-hidden="true"
+            />
+          )}
+          <span
+            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+          >
+            &#8203;
+          </span>
+          {children}
+        </div>
+      </div>
+    </section>
+  );
+};

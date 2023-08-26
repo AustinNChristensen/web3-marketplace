@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { WalletBar } from "@/components/WalletBar";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CourseList } from "@/components/CourseList";
@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useNetwork } from "@/hooks/useNetwork";
 import { useWeb3 } from "@/providers/web3";
 import { useAccount } from "@/hooks/useAccount";
+import { CourseCard } from "@/components/CourseCard";
 
 export default function Home() {
   const [coursesData, setCoursesData] = useState<ICourse[]>([]);
@@ -22,25 +23,21 @@ export default function Home() {
     const fetchData = async () => {
       const res = await getData();
       setCoursesData(res.data);
-    }
+    };
 
     fetchData();
-
   }, []);
 
   return (
     <div className="fit">
       <Hero />
       <Breadcrumbs />
-      <WalletBar
-        address={account.data}
-        network={network.data}
-      />
+      <WalletBar address={account.data} network={network} />
       <Currency />
       <OrderInfo />
-      <CourseList
-        courses={coursesData}
-      />
+      <CourseList courses={coursesData}>
+        {(course) => <CourseCard key={course.id} course={course} />}
+      </CourseList>
     </div>
   );
 }
@@ -48,4 +45,4 @@ export default function Home() {
 const getData = async () => {
   const res = await getAllCourses();
   return res;
-}
+};

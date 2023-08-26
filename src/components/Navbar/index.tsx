@@ -5,7 +5,7 @@ import { Button } from "../Button";
 import { useAccount } from "@/hooks/useAccount";
 
 export const Navbar = () => {
-  const { connect, isWeb3Loaded, isLoading, web3 } = useWeb3();
+  const { connect, isLoading, web3, isMetamaskInstalled } = useWeb3();
   const { account } = useAccount(web3);
 
   return (
@@ -38,7 +38,7 @@ export const Navbar = () => {
                 <Button onClick={connect} disabled={true}>
                   Loading...
                 </Button>
-              ) : isWeb3Loaded ? (
+              ) : isMetamaskInstalled ? (
                   account.data ?
                     account.isAdmin ? (
                     <Button onClick={connect}>Hello Admin</Button>
