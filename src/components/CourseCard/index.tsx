@@ -5,9 +5,10 @@ import Link from "next/link";
 interface ICourseCardProps {
   course: ICourse;
   Footer?: React.FC;
+  disabled?: boolean;
 }
 
-export const CourseCard = ({ course, Footer }: ICourseCardProps) => {
+export const CourseCard = ({ course, Footer, disabled }: ICourseCardProps) => {
   return (
     <div
       key={course.id}
@@ -16,9 +17,9 @@ export const CourseCard = ({ course, Footer }: ICourseCardProps) => {
       <div className="flex h-full">
         <div className="flex-1 h-full next-image-wrapper">
           <Image
-            className="object-cover"
+            className={`object-cover h-full ${disabled && "filter grayscale"}`}
             src={course.coverImage}
-            layout="responsive"
+            layout="cover"
             width="200"
             height="230"
             alt={course.title}
@@ -34,7 +35,9 @@ export const CourseCard = ({ course, Footer }: ICourseCardProps) => {
           >
             {course.title}
           </Link>
-          <p className="mt-2 text-gray-500">{course?.description?.substring(0, 70)}</p>
+          <p className="mt-2 text-gray-500">
+            {course?.description?.substring(0, 70)}
+          </p>
           {Footer && <Footer />}
         </div>
       </div>

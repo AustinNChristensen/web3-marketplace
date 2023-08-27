@@ -1,13 +1,7 @@
 "use client";
-import {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+
 import detectEthereumProvider from "@metamask/detect-provider";
+import { createContext, PropsWithChildren, useState, useEffect, useMemo, useContext } from "react";
 import Web3 from "web3";
 
 type Web3ContextType = {

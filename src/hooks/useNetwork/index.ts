@@ -1,3 +1,4 @@
+"use client";
 import { useEffect } from "react";
 import useSWR from "swr";
 
@@ -9,9 +10,10 @@ const NETWORKS = {
   42: "Kovan Test Network",
   56: "Binance Smart Chain",
   1337: "Ganache",
-}
+};
 
-const targetNetwork = NETWORKS[process.env.NEXT_PUBLIC_TARGET_CHAIN_ID]
+// @ts-ignore
+const targetNetwork = NETWORKS[process.env.NEXT_PUBLIC_TARGET_CHAIN_ID];
 
 export interface IUseNetworkReturn {
   network: {
@@ -28,15 +30,16 @@ export const useNetwork = (web3: any): IUseNetworkReturn => {
   const { data, error, mutate, ...rest } = useSWR(
     () => (web3 ? "web3/network" : null),
     async () => {
-      const chainId: keyof typeof NETWORKS = await web3.eth.getChainId()
-      return NETWORKS[chainId]
+      const chainId: keyof typeof NETWORKS = await web3.eth.getChainId();
+      return NETWORKS[chainId];
     }
   );
 
   useEffect(() => {
-     window.ethereum?.on("chainChanged", (chainId: string) => {
-      mutate(NETWORKS[parseInt(chainId, 16) as keyof typeof NETWORKS])
-    })
+    // @ts-ignore
+    window.ethereum?.on("chainChanged", (chainId: string) => {
+      mutate(NETWORKS[parseInt(chainId, 16) as keyof typeof NETWORKS]);
+    });
   }, [mutate]);
 
   return {

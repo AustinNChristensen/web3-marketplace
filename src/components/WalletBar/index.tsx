@@ -1,18 +1,14 @@
-import { IUseNetworkReturn } from "@/hooks/useNetwork";
+import { useWalletInfo } from "@/hooks/useWalletInfo";
 import { useWeb3 } from "@/providers/web3";
 
-interface IWalletBarProps {
-  network?: IUseNetworkReturn["network"];
-  address?: string;
-}
-
-export const WalletBar = ({ address, network }: IWalletBarProps) => {
+export const WalletBar = () => {
   const { isMetamaskInstalled } = useWeb3();
+  const { account, network } = useWalletInfo();
 
   return (
     <section className="text-white bg-indigo-600 rounded-lg">
       <div className="p-8">
-        <h1 className="text-2xl">Hello, {address || "Unknown Address"}</h1>
+        <h1 className="text-2xl">Hello, {account.data || "Unknown Address"}</h1>
         <h2 className="subtitle mb-5 text-xl">
           I hope you are having a great day!
         </h2>

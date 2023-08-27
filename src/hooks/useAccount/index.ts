@@ -1,3 +1,4 @@
+'use client';
 import { useEffect } from "react";
 import useSWR from "swr";
 
@@ -13,6 +14,7 @@ export const useAccount = (web3: any) => {
   );
 
   useEffect(() => {
+    // @ts-ignore
     window.ethereum?.on("accountsChanged", (accounts: any[]) =>
       mutate(accounts[0] ?? null)
     );

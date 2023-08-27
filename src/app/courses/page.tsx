@@ -1,28 +1,27 @@
 "use client";
+
 import { Button } from "@/components/Button";
 import { CourseCard } from "@/components/CourseCard";
 import { CourseList } from "@/components/CourseList";
+import { CoursePageHeader } from "@/components/CoursesPage/CoursePageHeader";
 import { OrderModal } from "@/components/OrderModal";
-import { WalletBar } from "@/components/WalletBar";
 import { getAllCourses } from "@/content/courses/fetcher";
-import { useAccount } from "@/hooks/useAccount";
-import { useNetwork } from "@/hooks/useNetwork";
-import { useWeb3 } from "@/providers/web3";
+import { useEthPrice } from "@/hooks/useEthPrice";
+import { useWalletInfo } from "@/hooks/useWalletInfo";
 import { ICourse } from "@/types";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 const getCoursesData = async () => {
   const { data } = await getAllCourses();
   return data;
 };
 
-export default function Courses() {
+const Courses = () => {
   const [selectedCourse, setSelectedCourse] = useState<ICourse | null>(null);
 
-  const { web3 } = useWeb3();
-  const { account } = useAccount(web3);
-  const { network } = useNetwork(web3);
+  const { account, network, canPurchaseCourse } = useWalletInfo();
   const [courses, setCourses] = useState<ICourse[]>([]);
+  const { eth } = useEthPrice();
 
   useEffect(() => {
     const getData = async () => {
@@ -33,21 +32,27 @@ export default function Courses() {
     getData();
   }, []);
 
+   const purchaseCourse = (order: any) => {
+    alert(JSON.stringify(order))
+  }
+
   return (
     <>
       <div className="py-4">
-        <WalletBar address={account.data} network={network} />
+       <CoursePageHeader />
       </div>
       <CourseList courses={courses}>
         {(course) => (
           <CourseCard
             key={course.id}
             course={course}
+            disabled={!canPurchaseCourse}
             Footer={() => (
               <div className="mt-4">
                 <Button
                   variant="lightPurple"
                   onClick={() => setSelectedCourse(course)}
+                  disabled={!canPurchaseCourse}
                 >
                   Purchase
                 </Button>
@@ -60,8 +65,11 @@ export default function Courses() {
         <OrderModal
           course={selectedCourse}
           onClose={() => setSelectedCourse(null)}
+          onSubmit={purchaseCourse}
         />
       )}
     </>
   );
 }
+
+export default Courses;

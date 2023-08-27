@@ -4,12 +4,11 @@ import {
 } from "@/components/CoursesPage/CoursePageCuricculum";
 import { CoursePageHero } from "@/components/CoursesPage/CoursePageHero";
 import { CoursePageKeypoint } from "@/components/CoursesPage/CoursePageKeypoint";
-import { CoursePageModal } from "@/components/CoursesPage/CoursePageModal";
 import { ICourse } from "@/types";
 import { getAllCourses } from "@content/courses/fetcher";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export const CourseDetail = ({
+const CourseDetail = ({
   params,
 }: {
   params: { courseID: string };
@@ -38,7 +37,7 @@ export const CourseDetail = ({
         </div>
         <CoursePageKeypoint points={courseData.wsl} />
         <CoursePageCurriculum locked={true} />
-        <CoursePageModal isOpen={false} />
+        {/* <OrderModal isOpen={false} /> */}
       </>
     );
   } else {
