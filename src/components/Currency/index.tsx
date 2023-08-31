@@ -1,4 +1,4 @@
-import { useEthPrice } from "@/hooks/useEthPrice";
+import { COURSE_PRICE, useEthPrice } from "@/hooks/useEthPrice";
 import Image from "next/image";
 import { Loader } from "../Loader";
 
@@ -10,21 +10,22 @@ export const Currency = () => {
       <div className="flex flex-1 items-stretch text-center">
         <div className="p-10 border drop-shadow rounded-md">
           <div className="flex items-center">
-           { true ?
-            <Loader /> :
-            <>
-              <Image
-                layout="fixed"
-                height="35"
-                width="35"
+            {eth.data ? (
+              <>
+                <Image
+                  layout="fixed"
+                  height="35"
+                  width="35"
                   src="/small-eth.webp"
-                  alt='eth logo'
-              />
-              <span className="text-2xl font-bold">
-                = {eth.data}$
-              </span>
-            </>
-            }
+                  alt="eth logo"
+                />
+                <span className="text-2xl font-bold">= ${eth.data}</span>
+              </>
+            ) : (
+              <div className="w-full flex justify-center">
+                <Loader size="md" />
+              </div>
+            )}
           </div>
           <p className="text-xl text-gray-500">Current eth Price</p>
         </div>
@@ -32,17 +33,26 @@ export const Currency = () => {
       <div className="flex flex-1 items-stretch text-center">
         <div className="p-10 border drop-shadow rounded-md">
           <div className="flex items-center">
-            <span className="text-2xl font-bold">
-              {eth.individualCoursePrice}
-            </span>
-            <Image
-              layout="fixed"
-              height="35"
-              width="35"
-              src="/small-eth.webp"
-              alt="eth logo"
-            />
-            <span className="text-2xl font-bold">= 15$</span>
+            {eth.data ? (
+              <>
+                <span className="text-2xl font-bold mr-2">${COURSE_PRICE}</span>
+
+                <span className="text-2xl font-bold">
+                  = {eth.individualCoursePrice}
+                </span>
+                <Image
+                  layout="fixed"
+                  height="35"
+                  width="35"
+                  src="/small-eth.webp"
+                  alt="eth logo"
+                />
+              </>
+            ) : (
+              <div className="w-full flex justify-center">
+                <Loader size="md" />
+              </div>
+            )}
           </div>
           <p className="text-xl text-gray-500">Price per course</p>
         </div>

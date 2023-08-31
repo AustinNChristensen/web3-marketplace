@@ -27,15 +27,21 @@ interface IFormState {
   confirmationEmail: string;
 }
 
-const createFormState = ({ price, email, confirmationEmail }: IFormState, hasAgreedTOS: boolean) => {
+const createFormState = (
+  { price, email, confirmationEmail }: IFormState,
+  hasAgreedTOS: boolean
+) => {
   if (!price || Number(price) <= 0) {
     return _createFormState(true, "Price is not valid.");
   } else if (confirmationEmail.length === 0 || email.length === 0) {
     return _createFormState(true);
   } else if (email !== confirmationEmail) {
     return _createFormState(true, "Email are not matching.");
-  }  else if (!hasAgreedTOS) {
-    return _createFormState(true, "You need to agree with terms of service in order to submit the form")
+  } else if (!hasAgreedTOS) {
+    return _createFormState(
+      true,
+      "You need to agree with terms of service in order to submit the form"
+    );
   }
 
   return _createFormState();
@@ -44,7 +50,7 @@ const createFormState = ({ price, email, confirmationEmail }: IFormState, hasAgr
 export const OrderModal = ({ course, onClose, onSubmit }: IOrderModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [order, setOrder] = useState(defaultOrder);
-    const [hasAgreedTOS, setHasAgreedTOS] = useState(false)
+  const [hasAgreedTOS, setHasAgreedTOS] = useState(false);
   const [enablePrice, setEnablePrice] = useState(false);
 
   const { eth } = useEthPrice();
@@ -62,8 +68,8 @@ export const OrderModal = ({ course, onClose, onSubmit }: IOrderModalProps) => {
   const closeModal = () => {
     setIsOpen(false);
     setOrder(defaultOrder);
-       setEnablePrice(false)
-    setHasAgreedTOS(false)
+    setEnablePrice(false);
+    setHasAgreedTOS(false);
     onClose();
   };
 
@@ -139,6 +145,7 @@ export const OrderModal = ({ course, onClose, onSubmit }: IOrderModalProps) => {
                   id="email"
                   className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
                   placeholder="x@y.com"
+                  value={order.email}
                   onChange={({ target: { value } }) => {
                     setOrder({
                       ...order,
@@ -162,6 +169,7 @@ export const OrderModal = ({ course, onClose, onSubmit }: IOrderModalProps) => {
                   id="confirmationEmail"
                   className="w-80 focus:ring-indigo-500 shadow-md focus:border-indigo-500 block pl-7 p-4 sm:text-sm border-gray-300 rounded-md"
                   placeholder="x@y.com"
+                  value={order.confirmationEmail}
                   onChange={({ target: { value } }) => {
                     setOrder({
                       ...order,
@@ -172,10 +180,14 @@ export const OrderModal = ({ course, onClose, onSubmit }: IOrderModalProps) => {
               </div>
               <div className="text-xs text-gray-700 flex">
                 <label className="flex items-center mr-2">
-                  <input type="checkbox" className="form-checkbox"      checked={hasAgreedTOS}
-                    onChange={({target: {checked}}) => {
-                      setHasAgreedTOS(checked)
-                    }}/>
+                  <input
+                    type="checkbox"
+                    className="form-checkbox"
+                    checked={hasAgreedTOS}
+                    onChange={({ target: { checked } }) => {
+                      setHasAgreedTOS(checked);
+                    }}
+                  />
                 </label>
                 <span>
                   I accept Eincode &apos;terms of service&apos; and I agree that
@@ -195,7 +207,7 @@ export const OrderModal = ({ course, onClose, onSubmit }: IOrderModalProps) => {
           <Button
             disabled={formState.isDisabled}
             onClick={() => {
-              onSubmit(order)
+              onSubmit(order);
             }}
           >
             Submit

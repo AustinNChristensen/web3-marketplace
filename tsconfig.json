@@ -24,6 +24,7 @@
       "@content/*": ["./src/content/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@web3/*": ["./src/web3/*"],
+      "@utils/*": ["./src/utils/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

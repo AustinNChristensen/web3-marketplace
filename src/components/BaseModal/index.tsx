@@ -1,4 +1,4 @@
-import { classNames } from "@/utils";
+import { classNames } from "@/utils/classes";
 import { PropsWithChildren } from "react";
 
 export const BaseModal = ({

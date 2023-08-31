@@ -1,7 +1,15 @@
 "use client";
 
+import { loadContract } from "@/utils/loadContract";
 import detectEthereumProvider from "@metamask/detect-provider";
-import { createContext, PropsWithChildren, useState, useEffect, useMemo, useContext } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useState,
+  useEffect,
+  useMemo,
+  useContext,
+} from "react";
 import Web3 from "web3";
 
 type Web3ContextType = {
@@ -9,7 +17,7 @@ type Web3ContextType = {
   web3?: any;
   contract?: any;
   isLoading?: boolean;
-    connect?: () => Promise<void> | void;
+  connect?: () => Promise<void> | void;
   isWeb3Loaded?: boolean;
   isMetamaskInstalled?: boolean;
 };
@@ -30,10 +38,12 @@ export const Web3Provider = ({ children }: PropsWithChildren<{}>) => {
       if (provider) {
         // @ts-ignore
         const web3 = new Web3(provider);
+        const contract = await loadContract(web3, "CourseMarketplace");
+
         setWeb3Api({
           provider,
           web3,
-          contract: null,
+          contract,
           isLoading: false,
         });
       } else {
@@ -51,16 +61,19 @@ export const Web3Provider = ({ children }: PropsWithChildren<{}>) => {
       ...web3Api,
       isWeb3Loaded: web3 !== null,
       isMetamaskInstalled: !isLoading && web3,
-      connect: provider ?
-        async () => {
-          try {
-            await provider.request({method: "eth_requestAccounts"})
-          } catch {
-            location.reload()
+      connect: provider
+        ? async () => {
+            try {
+              await provider.request({ method: "eth_requestAccounts" });
+            } catch {
+              location.reload();
+            }
           }
-        } :
-        () => console.error("Cannot connect to Metamask, try to reload your browser please.")
-    }
+        : () =>
+            console.error(
+              "Cannot connect to Metamask, try to reload your browser please."
+            ),
+    };
   }, [web3Api]);
 
   return (
